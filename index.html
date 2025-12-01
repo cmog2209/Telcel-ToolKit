@@ -241,10 +241,65 @@ footer {
   z-index: 1000;
 }
 
+/* Nuevos Estilos para el Login */
+#login-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000; /* Asegura que esté por encima de todo */
+}
+
+.login-box {
+    background: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 300px;
+}
+
+.login-box h2 {
+    color: var(--telcel-blue);
+    margin-bottom: 20px;
+}
+
+.login-box input {
+    width: 90%;
+    margin: 10px 0;
+    padding: 10px;
+    height: auto; /* Ajuste para el nuevo contexto */
+    box-sizing: border-box;
+}
+
+#login-error {
+    color: #dc3545; 
+    margin-top: 10px;
+    visibility: hidden;
+    font-weight: bold;
+}
+/* Ocultar la interfaz principal por defecto */
+#sidebar, #content-wrapper, footer {
+    display: none; 
+}
 </style>
 </head>
 <body>
 
+<div id="login-screen">
+    <div class="login-box">
+        <h2>Acceso al Telcel Toolkit</h2>
+        <input type="text" id="username" placeholder="Usuario" autocomplete="off">
+        <input type="password" id="password" placeholder="Contraseña">
+        <button id="loginButton" style="width: 100%;">ENTRAR</button>
+        <p id="login-error">Usuario o contraseña incorrectos.</p>
+    </div>
+</div>
 <aside id="sidebar">
     <h3>Telcel Toolkit</h3>
     <ul>
@@ -572,6 +627,48 @@ footer {
 
     document.addEventListener('DOMContentLoaded', () => {
 
+        // --- Lógica de Login (Nueva) ---
+        const USERNAME = "EpamNeoris";
+        const PASSWORD = "CMOG220989";
+
+        const loginScreen = document.getElementById("login-screen");
+        const loginButton = document.getElementById("loginButton");
+        const usernameInput = document.getElementById("username");
+        const passwordInput = document.getElementById("password");
+        const loginError = document.getElementById("login-error");
+        
+        const sidebar = document.getElementById("sidebar");
+        const contentWrapper = document.getElementById("content-wrapper");
+        const footer = document.querySelector("footer"); // Selecciona el footer
+
+        function handleLogin() {
+            if (usernameInput.value === USERNAME && passwordInput.value === PASSWORD) {
+                // Credenciales correctas: Ocultar login y mostrar toolkit
+                loginScreen.style.display = "none";
+                sidebar.style.display = "block";
+                contentWrapper.style.display = "block";
+                footer.style.display = "block"; // Mostrar el footer
+
+                // Asegurar que se muestre la página por defecto al iniciar sesión
+                showPage('page-home'); 
+            } else {
+                // Credenciales incorrectas: Mostrar mensaje de error
+                loginError.style.visibility = "visible";
+                setTimeout(() => loginError.style.visibility = "hidden", 3000);
+            }
+        }
+
+        loginButton.addEventListener('click', handleLogin);
+        
+        // Permite presionar Enter para iniciar sesión
+        passwordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleLogin();
+            }
+        });
+        // --- FIN Lógica de Login ---
+
+
         // LÓGICA DE NAVEGACIÓN DE PÁGINA ÚNICA
         const pages = document.querySelectorAll('.page-content-wrapper');
         const navLinks = document.querySelectorAll('#sidebar a');
@@ -597,8 +694,9 @@ footer {
             });
         });
 
-        // Inicializar la vista (mostrar Home por defecto)
-        showPage('page-home');
+        // NOTA: La inicialización de la vista (showPage('page-home'))
+        // ahora se realiza dentro de 'handleLogin' para que solo se ejecute
+        // si el usuario ha iniciado sesión.
 
 
         // --- Lógica de Herramientas (Ya existente) ---
@@ -652,6 +750,7 @@ footer {
 
             while (randomDigits.length < 10) {
                 let digit = Math.floor(Math.random() * 10);
+                // Evita que los dígitos adyacentes sean consecutivos (regla implementada)
                 if (randomDigits.length === 0 || Math.abs(digit - parseInt(randomDigits[randomDigits.length - 1])) !== 1) {
                     randomDigits += digit;
                 }
@@ -741,7 +840,9 @@ footer {
         if (!fechaInput.value) {
             fechaInput.value = hoy.toISOString().split('T')[0];
         }
-        calcularFechas();
+        // Llamada a calcularFechas se mantiene para que los ciclos se muestren 
+        // cuando la página de Home sea visible después del login.
+        calcularFechas(); 
         fechaInput.addEventListener('change', calcularFechas);
 
 
