@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -495,7 +494,8 @@ footer {
     <footer>
     Creado por CMOG | by EpamNeoris | © <span id="year"></span> Todos los derechos reservados | V2.4.1
     </footer>
-</div> <script>
+</div> 
+<script>
     // Base de datos de ladas
     const ladas = {
         "55": "Ciudad de México y área metropolitana",
@@ -627,9 +627,14 @@ footer {
 
     document.addEventListener('DOMContentLoaded', () => {
 
-        // --- Lógica de Login (Nueva) ---
-        const USERNAME = "EpamNeoris";
-        const PASSWORD = "CMOG220989";
+        // --- Lógica de Login (Ofuscada para no mostrar las credenciales directamente) ---
+        // Credenciales: Usuario: EpamNeoris | Contraseña: CMOG220989
+        
+        // Variables para reconstruir las credenciales (ofuscación simple)
+        const U_P1 = "Epa";
+        const U_P2 = "mNeoris";
+        const P_P1 = "CMOG";
+        const P_P2 = "220989";
 
         const loginScreen = document.getElementById("login-screen");
         const loginButton = document.getElementById("loginButton");
@@ -639,10 +644,14 @@ footer {
         
         const sidebar = document.getElementById("sidebar");
         const contentWrapper = document.getElementById("content-wrapper");
-        const footer = document.querySelector("footer"); // Selecciona el footer
+        const footer = document.querySelector("footer");
 
         function handleLogin() {
-            if (usernameInput.value === USERNAME && passwordInput.value === PASSWORD) {
+            // Reconstruir las credenciales en tiempo de ejecución
+            const CONSTRUCTED_USER = U_P1 + U_P2;
+            const CONSTRUCTED_PASS = P_P1 + P_P2;
+
+            if (usernameInput.value === CONSTRUCTED_USER && passwordInput.value === CONSTRUCTED_PASS) {
                 // Credenciales correctas: Ocultar login y mostrar toolkit
                 loginScreen.style.display = "none";
                 sidebar.style.display = "block";
