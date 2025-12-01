@@ -14,30 +14,140 @@
   </svg>'>
 
 <style>
-body {
-  margin: 0;
-  padding-bottom: 80px; /* espacio para el footer */
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: #f4f4f4;
+/* --- VARIABLES Y RESET GENERAL --- */
+:root {
+    --sidebar-width: 200px; /* Ancho fijo de la barra lateral */
+    --header-height: 68px;
+    --main-bg: #f4f4f4;
+    --telcel-blue: #0047BB;
 }
 
-/* Header Telcel */
+body {
+  margin: 0;
+  padding-bottom: 80px; 
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--main-bg);
+}
+
+/* --- BARRA LATERAL (SIDEBAR) --- */
+#sidebar {
+    width: var(--sidebar-width);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    background-color: #fff;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    padding-top: 20px;
+    box-sizing: border-box;
+    /* CAMBIO V2.4.1: Borde para asegurar visibilidad */
+    border-right: 1px solid #ddd; 
+}
+
+#sidebar h3 {
+    color: var(--telcel-blue);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#sidebar ul li a {
+    display: block;
+    padding: 15px 20px;
+    text-decoration: none;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s;
+    font-weight: bold;
+}
+
+#sidebar ul li a:hover {
+    background-color: #f0f0f0;
+    color: var(--telcel-blue);
+}
+
+/* --- CONTENIDO PRINCIPAL Y HEADER/FOOTER --- */
+
+/* Contenedor que empuja el resto del contenido */
+#content-wrapper {
+    /* Mueve todo el contenido a la derecha del sidebar */
+    margin-left: var(--sidebar-width); 
+    padding-top: var(--header-height); /* Espacio para el header fijo */
+}
+
 header {
-  background-color: #0047BB;
+  background-color: var(--telcel-blue);
   color: #fff;
-  text-align: center;
   padding: 20px;
   font-size: 28px;
   font-weight: bold;
   letter-spacing: 1px;
+  text-align: center;
+  /* Fijo respecto al content-wrapper, no a la ventana */
+  position: fixed; 
+  top: 0;
+  /* Comienza después del sidebar y ocupa el ancho restante */
+  left: var(--sidebar-width);
+  width: calc(100% - var(--sidebar-width)); 
+  z-index: 1010; 
+  box-sizing: border-box; 
 }
+
+/* El título ahora está centrado en el espacio restante */
+#header-title {
+    padding-left: 0; 
+}
+
+
+/* Contenedor principal de contenido (Page) */
+.page-content-wrapper {
+  max-width: 1400px; 
+  margin: 20px auto;
+  padding: 0 20px;
+}
+
+/* Contenedor de secciones en grid (usado para Home y SKU's) */
+.sections-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 columnas por defecto (Home) */
+  gap: 20px; /* espacio entre secciones */
+}
+
+/* SKU's forzado a una sola columna */
+#page-skus .sections-container {
+    grid-template-columns: 1fr; 
+}
+
+.section {
+  padding: 15px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Otros estilos (iguales a la versión anterior, solo se ajustan variables si aplica) */
 
 h3 {
   font-size: 20px;
-  color: #0047BB; /* Azul Telcel */
+  color: var(--telcel-blue); 
   margin-bottom: 10px;
   text-align: center;
 }
+/* Estilo para los títulos de las tablas */
+h4 {
+    font-size: 18px;
+    color: #333;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
 input, button {
   margin: 8px;
   outline: none;
@@ -50,10 +160,11 @@ input {
   border-radius: 4px;
   padding-left: 10px;
 }
+/* Estilo general para todos los botones */
 button {
   width: 280px;
   height: 42px;
-  background-color: #0047BB;
+  background-color: var(--telcel-blue);
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -68,135 +179,430 @@ button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
-#mensaje, #mensajeID, #msgTel1, #msgTel2 {
+
+/* Estilos para mensajes discretos de éxito */
+#mensaje, #mensajeID, #msgTel1, #msgTel2, #msgSkuCopy {
   font-size: 14px;
-  color: #28a745; /* verde para éxito */
+  color: #28a745; /* Verde para éxito */
   margin-left: 10px;
   visibility: hidden;
-}
-
-/* Contenedor de secciones en grid */
-.sections-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 columnas */
-  gap: 20px; /* espacio entre secciones */
-  max-width: 1600px;
-  margin: 20px auto;
-  padding: 0 20px;
-}
-
-.section {
-  padding: 15px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 .ciclos-container{
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* 2 columnas */
-  gap: 20px; /* espacio entre secciones */
+  gap: 20px; 
   max-width: 1600px;
   margin: 20px auto;
   padding: 0 20px;
 }
 
+/* Estilos para las Tablas de SKU's */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 16px;
+  text-align: left;
+}
+
+table th, table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+table th {
+  background-color: var(--telcel-blue); /* Azul Telcel */
+  color: white;
+  text-align: center;
+}
+
+/* Estilo específico para los botones dentro de las tablas (más pequeños) */
+table button {
+    width: 100px; 
+    height: 30px;
+    font-size: 14px;
+    margin: 2px;
+}
+
 footer {
   position: fixed;
   bottom: 0;
-  left: 0;
-  width: 100%;
+  /* Comienza después del sidebar y ocupa el ancho restante */
+  left: var(--sidebar-width);
+  width: calc(100% - var(--sidebar-width));
   padding: 15px;
   text-align: center;
   font-size: 14px;
   color: #fff;
-  background-color: #0047BB;
+  background-color: var(--telcel-blue);
   border-top: 2px solid #003a99;
+  z-index: 1000;
 }
 
 </style>
 </head>
 <body>
-<!-- Header -->
-<header>
-Telcel - Toolkit
-</header>
 
-<!-- Contenedor de todas las secciones -->
-<div class="sections-container">
-  <!-- Sección ICCID -->
-  <div class="section">
-    <h3>Generar ICCID</h3>
-    <input type="text" id="iccid18" placeholder="ICCID 18 DIGITOS" maxlength="18">
-    <button id="procesar" disabled>PROCESAR</button><br>
-    <input type="text" id="iccid19" placeholder="ICCID 19 DIGITOS" readonly>
-    <button id="copiar" disabled>COPIAR</button>
-    <span id="mensaje">¡Copiado al portapapeles!</span>
-  </div>
+<aside id="sidebar">
+    <h3>Telcel Toolkit</h3>
+    <ul>
+        <li><a href="#" data-page="home">🏠 Home</a></li>
+        <li><a href="#" data-page="skus">📦 SKU's</a></li>
+    </ul>
+</aside>
 
-  <!-- Sección Identificación -->
-  <div class="section">
-    <h3>Generar Identificación</h3>
-    <input type="text" id="identificacion" placeholder="IDMEX + 10 dígitos" readonly>
-    <button id="generarID">GENERAR IDENTIFICACIÓN</button>
-    <button id="copiarID" disabled>COPIAR</button>
-    <span id="mensajeID">¡Identificación copiada!</span>
-  </div>
+<div id="content-wrapper">
+    <header>
+        <div id="header-title">Telcel - Toolkit</div>
+    </header>
 
-  <!-- Sección Números de contacto -->
-  <div class="section">
-    <h3>Número de contactos</h3>
-    <input type="text" id="telefono1" placeholder="Teléfono 1" readonly>
-    <button id="copiarTel1" disabled>COPIAR</button>
-    <span id="msgTel1">¡Teléfono 1 copiado!</span><br>
+    <main id="app-content">
 
-    <input type="text" id="telefono2" placeholder="Teléfono 2" readonly>
-    <button id="copiarTel2" disabled>COPIAR</button>
-    <span id="msgTel2">¡Teléfono 2 copiado!</span><br>
+        <div id="page-home" class="page-content-wrapper">
+            <div class="sections-container">
+                <div class="section">
+                    <h3>Generar ICCID</h3>
+                    <input type="text" id="iccid18" placeholder="ICCID 18 DIGITOS" maxlength="18">
+                    <button id="procesar" disabled>PROCESAR</button><br>
+                    <input type="text" id="iccid19" placeholder="ICCID 19 DIGITOS" readonly>
+                    <button id="copiar" disabled>COPIAR</button>
+                    <span id="mensaje">¡Copiado al portapapeles!</span>
+                </div>
+              
+                <div class="section">
+                    <h3>Generar Identificación</h3>
+                    <input type="text" id="identificacion" placeholder="IDMEX + 10 dígitos" readonly>
+                    <button id="generarID">GENERAR IDENTIFICACIÓN</button>
+                    <button id="copiarID" disabled>COPIAR</button>
+                    <span id="mensajeID">¡Identificación copiada!</span>
+                </div>
+              
+                <div class="section">
+                    <h3>Número de contactos</h3>
+                    <input type="text" id="telefono1" placeholder="Teléfono 1" readonly>
+                    <button id="copiarTel1" disabled>COPIAR</button>
+                    <span id="msgTel1">¡Teléfono 1 copiado!</span><br>
+              
+                    <input type="text" id="telefono2" placeholder="Teléfono 2" readonly>
+                    <button id="copiarTel2" disabled>COPIAR</button>
+                    <span id="msgTel2">¡Teléfono 2 copiado!</span><br>
+              
+                    <button id="generarTels">GENERAR NÚMEROS</button>
+                </div>
+              
+                <div class="section">
+                    <h3>Identificador de LADA México R9 - DEUR</h3>
+                    <input type="text" id="phone" placeholder="Ingresa el número (10 dígitos)" maxlength="10" inputmode="numeric" pattern="\d{10}" title="Debe contener exactamente 10 dígitos">
+                    <button onclick="buscarLada()">Buscar</button>
+                    <p id="resultado"></p>
+                </div>
+              
+                <div class="section">
+                    <h3>Próximas Fechas de Corte</h3>
+                    <label for="fecha">Selecciona la fecha de activación:</label>
+                    <input type="date" id="fecha" onkeydown="return false;" maxlength="8">
+                    <br>
+                    <label>Proximas 10 fechas de corte:</label>
+                    <div class="result">
+                        <div class="ciclos-container">
+                            <div class="ciclo">
+                                <h4>Ciclo 82:</h4>
+                                <ul id="ciclo82"></ul>
+                            </div>
+                            <div class="ciclo">
+                                <h4>Ciclo 83:</h4>
+                                <ul id="ciclo83"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <button id="generarTels">GENERAR NÚMEROS</button>
-  </div>
+        <div id="page-skus" class="page-content-wrapper" style="display:none;">
+            <h3>Catálogo de SKU's</h3>
+            
+            <p style="text-align: center; margin-bottom: 20px;">
+                <span id="msgSkuCopy" style="font-size: 16px; font-weight: bold; margin: 0; color: #28a745; visibility: hidden;"></span>
+            </p>
 
-  <!-- Sección Región-->
-<div class="section">
-  <h3>Identificador de LADA México R9 - DEUR</h3>
-  <input type="text" id="phone" placeholder="Ingresa el número (10 dígitos)" maxlength="10" inputmode="numeric" pattern="\d{10}" title="Debe contener exactamente 10 dígitos">
-  <button onclick="buscarLada()">Buscar</button>
-  <p id="resultado"></p>
-</div>
+            <div class="sections-container">
+                
+                <div class="section">
+                    <h4>CAC R1</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Esquema</th>
+                                <th>Oferta Primaria</th> 
+                                <th>SKU</th>
+                                <th>Modelo</th>
+                                <th>Precio</th>
+                                <th>Acción</th> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Plan Max 5000</td>
+                                <td>Oferta A</td> 
+                                <td>10001CAC</td>
+                                <td>Moto G50</td>
+                                <td>$3,999.00</td>
+                                <td><button onclick="copySku('10001CAC')">Copiar SKU</button></td> 
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-<!-- Sección ciclos-->
-<div class="section">
-  <h3>Próximas Fechas de Corte</h3>
-    <label for="fecha">Selecciona la fecha de activación:</label>
-    <input type="date" id="fecha" onkeydown="return false;" maxlength="8">
-    <!--button onclick="calcularFechas()">Calcular</button-->
-	<br>
-	<label>Proximas 10 fechas de corte:</label>
-	<div class="result">
-		<div class="ciclos-container">
-			<div class="ciclo">
-				<h4>Ciclo 82:</h4>
-				<ul id="ciclo82"></ul>
-			</div>
-			<div class="ciclo">
-				<h4>Ciclo 83:</h4>
-				<ul id="ciclo83"></ul>
-			</div>
-		</div>
-    </div>
-</div>
+                <div class="section">
+                    <h4>CAC R9</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Esquema</th>
+                                <th>Oferta Primaria</th> 
+                                <th>SKU</th>
+                                <th>Modelo</th>
+                                <th>Precio</th>
+                                <th>Acción</th> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Amigo Sin Límite</td>
+                                <td>Oferta B</td> 
+                                <td>90001CAC</td>
+                                <td>Xiaomi Note 10</td>
+                                <td>$4,599.00</td>
+                                <td><button onclick="copySku('90001CAC')">Copiar SKU</button></td> 
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="section">
+                    <h4>CAT R1</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Esquema</th>
+                                <th>Oferta Primaria</th> 
+                                <th>SKU</th>
+                                <th>Modelo</th>
+                                <th>Precio</th>
+                                <th>Acción</th> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Recarga $100</td>
+                                <td>Oferta C</td> 
+                                <td>10001CAT</td>
+                                <td>Chip Prepago</td>
+                                <td>$100.00</td>
+                                <td><button onclick="copySku('10001CAT')">Copiar SKU</button></td> 
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
+                <div class="section">
+                    <h4>CAT R9</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Esquema</th>
+                                <th>Oferta Primaria</th> 
+                                <th>SKU</th>
+                                <th>Modelo</th>
+                                <th>Precio</th>
+                                <th>Acción</th> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Portabilidad</td>
+                            <td>Oferta D</td> 
+                            <td>90001CAT</td>
+                            <td>SIM 5G</td>
+                            <td>$0.00</td>
+                            <td><button onclick="copySku('90001CAT')">Copiar SKU</button></td> 
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+
+    <footer>
+    Creado por CMOG | by EpamNeoris | © <span id="year"></span> Todos los derechos reservados | V2.4.1
+    </footer>
+</div> <script>
+    // Base de datos de ladas
+    const ladas = {
+        "55": "Ciudad de México y área metropolitana",
+        "33": "Guadalajara, Jalisco",
+        "81": "Monterrey, Nuevo León",
+        "449": "Aguascalientes, Ags.",
+        "686": "Mexicali, Baja California",
+        "612": "La Paz, Baja California Sur",
+        "981": "Campeche, Campeche",
+        "961": "Tuxtla Gutiérrez, Chiapas",
+        "614": "Chihuahua, Chihuahua",
+        "844": "Saltillo, Coahuila",
+        "312": "Colima, Colima",
+        "618": "Durango, Durango",
+        "722": "Toluca, Estado de México",
+        "473": "Guanajuato, Gto.",
+        "747": "Chilpancingo, Guerrero",
+        "771": "Pachuca, Hidalgo",
+        "443": "Morelia, Michoacán",
+        "777": "Cuernavaca, Morelos",
+        "311": "Tepic, Nayarit",
+        "951": "Oaxaca, Oaxaca",
+        "222": "Puebla, Puebla",
+        "442": "Querétaro, Qro.",
+        "983": "Chetumal, Quintana Roo",
+        "444": "San Luis Potosí, SLP",
+        "667": "Culiacán, Sinaloa",
+        "662": "Hermosillo, Sonora",
+        "993": "Villahermosa, Tabasco",
+        "834": "Ciudad Victoria, Tamaulipas",
+        "246": "Tlaxcala, Tlaxcala",
+        "228": "Xalapa, Veracruz",
+        "999": "Mérida, Yucatán",
+        "492": "Zacatecas, Zacatecas",
+        "493": "Jerez, Zacatecas",
+        "494": "Fresnillo, Zacatecas",
+        "496": "Sombrerete, Zacatecas",
+		"663": "Tijuana, Baja California"
+    };
+
+    function buscarLada() {
+        const numero = document.getElementById('phone').value.trim();
+      
+        if (numero.length < 2) {
+          document.getElementById('resultado').textContent = "Por favor ingresa al menos 2 dígitos.";
+          return;
+        }
+      
+        // Detectar lada (2 o 3 dígitos)
+        let lada = numero.substring(0, 3);
+        if (!ladas[lada]) {
+          lada = numero.substring(0, 2);
+        }
+      
+        const resultado = ladas[lada] ? 
+          `La lada ${lada} pertenece a ${ladas[lada]}.` : 
+          "Lada no encontrada en la base de datos.";
+      
+        document.getElementById('resultado').textContent = resultado;
+    }
+      
+    // Funciones de ciclos 
+    function calcularFechas() {
+        const fechaInput = document.getElementById('fecha').value;
+        if (!fechaInput) {
+            return; 
+        }
     
-</div>
+        // Crear la fecha seleccionada a medianoche (00:00:00)
+        const fechaSeleccionada = new Date(fechaInput + 'T00:00:00'); 
+        if (isNaN(fechaSeleccionada.getTime())) {
+            return; 
+        }
+    
+        // Fechas base (Noviembre = 10 en JS)
+        const base82 = new Date(2025, 10, 25); // 25/11/2025
+        const base83 = new Date(2025, 10, 22); // 22/11/2025
+    
+        // Intervalos
+        const intervalo82 = 3; 
+        const intervalo83 = 5; 
+    
+        mostrarFechas('ciclo82', fechaSeleccionada, base82, intervalo82, 10);
+        mostrarFechas('ciclo83', fechaSeleccionada, base83, intervalo83, 10);
+    }
+    
+    function mostrarFechas(elementId, fechaSeleccionada, fechaBase, intervalo, cantidad) {
+        const lista = document.getElementById(elementId);
+        lista.innerHTML = '';
+    
+        let fecha = new Date(fechaBase);
+    
+        // Avanzar hasta encontrar la primera fecha de corte IGUAL o POSTERIOR
+        while (fecha.getTime() < fechaSeleccionada.getTime()) {
+            fecha.setDate(fecha.getDate() + intervalo);
+        }
+        
+        let fechasGeneradas = 0;
+        while (fechasGeneradas < cantidad) {
+            lista.innerHTML += `<li>${fecha.toLocaleDateString('es-MX')}</li>`;
+            fecha.setDate(fecha.getDate() + intervalo);
+            fechasGeneradas++;
+        }
+    }
 
-<!-- Footer fijo -->
-<footer>
-Creado por CMOG | by EpamNeoris | © <span id="year"></span> Todos los derechos reservados | V2.1.1
-</footer>
+    /** * Función para copiar el SKU al portapapeles y mostrar un mensaje discreto */
+    function copySku(sku) {
+        const msgSkuCopy = document.getElementById("msgSkuCopy");
 
-<!-- Script -->
-<script>
+        navigator.clipboard.writeText(sku)
+            .then(() => {
+                msgSkuCopy.textContent = `¡SKU ${sku} copiado al portapapeles!`;
+                msgSkuCopy.style.color = '#28a745'; 
+                msgSkuCopy.style.visibility = "visible";
+                setTimeout(() => msgSkuCopy.style.visibility = "hidden", 2000);
+            })
+            .catch(err => {
+                console.error('Error al intentar copiar el SKU: ', err);
+                msgSkuCopy.textContent = 'Error: La copia directa falló. Intenta copiar manualmente o usa Live Server.';
+                msgSkuCopy.style.color = '#dc3545'; 
+                msgSkuCopy.style.visibility = "visible";
+                setTimeout(() => {
+                    msgSkuCopy.style.visibility = "hidden";
+                    msgSkuCopy.style.color = '#28a745'; 
+                }, 3000);
+            });
+    }
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // LÓGICA DE NAVEGACIÓN DE PÁGINA ÚNICA
+        const pages = document.querySelectorAll('.page-content-wrapper');
+        const navLinks = document.querySelectorAll('#sidebar a');
+        
+        /** Muestra una página específica y oculta todas las demás. */
+        function showPage(pageId) {
+            pages.forEach(page => {
+                page.style.display = 'none';
+            });
+            
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.style.display = 'block';
+            }
+        }
+
+        // Asigna el evento de clic a todos los enlaces del menú lateral
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetPageName = this.getAttribute('data-page'); 
+                showPage(`page-${targetPageName}`);
+            });
+        });
+
+        // Inicializar la vista (mostrar Home por defecto)
+        showPage('page-home');
+
+
+        // --- Lógica de Herramientas (Ya existente) ---
+
         // ICCID
         const input = document.getElementById("iccid18");
         const output = document.getElementById("iccid19");
@@ -318,194 +724,33 @@ Creado por CMOG | by EpamNeoris | © <span id="year"></span> Todos los derechos 
                 });
         };
 
-        // Base de datos de ladas
-        const ladas = {
-            "55": "Ciudad de México y área metropolitana",
-            "33": "Guadalajara, Jalisco",
-            "81": "Monterrey, Nuevo León",
-            "449": "Aguascalientes, Ags.",
-            "686": "Mexicali, Baja California",
-            "612": "La Paz, Baja California Sur",
-            "981": "Campeche, Campeche",
-            "961": "Tuxtla Gutiérrez, Chiapas",
-            "614": "Chihuahua, Chihuahua",
-            "844": "Saltillo, Coahuila",
-            "312": "Colima, Colima",
-            "618": "Durango, Durango",
-            "722": "Toluca, Estado de México",
-            "473": "Guanajuato, Gto.",
-            "747": "Chilpancingo, Guerrero",
-            "771": "Pachuca, Hidalgo",
-            "443": "Morelia, Michoacán",
-            "777": "Cuernavaca, Morelos",
-            "311": "Tepic, Nayarit",
-            "951": "Oaxaca, Oaxaca",
-            "222": "Puebla, Puebla",
-            "442": "Querétaro, Qro.",
-            "983": "Chetumal, Quintana Roo",
-            "444": "San Luis Potosí, SLP",
-            "667": "Culiacán, Sinaloa",
-            "662": "Hermosillo, Sonora",
-            "993": "Villahermosa, Tabasco",
-            "834": "Ciudad Victoria, Tamaulipas",
-            "246": "Tlaxcala, Tlaxcala",
-            "228": "Xalapa, Veracruz",
-            "999": "Mérida, Yucatán",
-            "492": "Zacatecas, Zacatecas",
-            "646": "Ensenada, Baja California",
-            "664": "Tijuana, Baja California",
-            "871": "Torreón, Coahuila/Durango",
-            "656": "Ciudad Juárez, Chihuahua",
-            "669": "Mazatlán, Sinaloa",
-            "998": "Cancún, Quintana Roo",
-            "961": "Tuxtla Gutiérrez, Chiapas",
-            "722": "Toluca, Estado de México",
-            "473": "Guanajuato, Gto.",
-            "477": "León, Gto.",
-            "462": "Irapuato, Gto.",
-            "464": "Salamanca, Gto.",
-            "466": "Salvatierra, Gto.",
-            "468": "San Felipe, Gto.",
-            "469": "Pénjamo, Gto.",
-            "442": "Querétaro, Qro.",
-            "446": "San Juan del Río, Qro.",
-            "771": "Pachuca, Hidalgo",
-            "779": "Tizayuca, Hidalgo",
-            "735": "Cuautla, Morelos",
-            "734": "Jojutla, Morelos",
-            "961": "Tuxtla Gutiérrez, Chiapas",
-            "962": "Tapachula, Chiapas",
-            "963": "Comitán, Chiapas",
-            "964": "San Cristóbal de las Casas, Chiapas",
-            "965": "Palenque, Chiapas",
-            "981": "Campeche, Campeche",
-            "982": "Ciudad del Carmen, Campeche",
-            "612": "La Paz, BCS",
-            "613": "Ciudad Constitución, BCS",
-            "624": "Cabo San Lucas, BCS",
-            "646": "Ensenada, BC",
-            "664": "Tijuana, BC",
-            "686": "Mexicali, BC",
-            "661": "Rosarito, BC",
-            "662": "Hermosillo, Sonora",
-            "644": "Ciudad Obregón, Sonora",
-            "631": "Nogales, Sonora",
-            "642": "Navojoa, Sonora",
-            "622": "Guaymas, Sonora",
-            "638": "Puerto Peñasco, Sonora",
-            "667": "Culiacán, Sinaloa",
-            "669": "Mazatlán, Sinaloa",
-            "687": "Guasave, Sinaloa",
-            "653": "Los Mochis, Sinaloa",
-            "834": "Ciudad Victoria, Tamaulipas",
-            "899": "Reynosa, Tamaulipas",
-            "868": "Matamoros, Tamaulipas",
-            "833": "Tampico, Tamaulipas",
-            "487": "Río Verde, San Luis Potosí",
-            "481": "Ciudad Valles, San Luis Potosí",
-            "444": "San Luis Potosí, SLP",
-            "492": "Zacatecas, Zacatecas",
-            "493": "Jerez, Zacatecas",
-            "494": "Fresnillo, Zacatecas",
-            "496": "Sombrerete, Zacatecas",
-			"663": "Tijuana, Baja California"
-        };
 
-        function buscarLada() {
-  const numero = document.getElementById('phone').value.trim();
-
-  if (numero.length < 2) {
-    document.getElementById('resultado').textContent = "Por favor ingresa al menos 2 dígitos.";
-    return;
-  }
-
-  // Detectar lada (2 o 3 dígitos)
-  let lada = numero.substring(0, 3);
-  if (!ladas[lada]) {
-    lada = numero.substring(0, 2);
-  }
-
-  const resultado = ladas[lada] ? 
-    `La lada ${lada} pertenece a ${ladas[lada]}.` : 
-    "Lada no encontrada en la base de datos.";
-
-  document.getElementById('resultado').textContent = resultado;
-}
-
-const phoneInput = document.getElementById('phone');
-  phoneInput.addEventListener('input', function() {
-    // Elimina cualquier carácter que no sea número
-    this.value = this.value.replace(/\D/g, '');
-    // Limita a 10 dígitos
-    if (this.value.length > 10) {
-      this.value = this.value.slice(0, 10);
-    }
-  });
+        // LADA Input Filter
+        const phoneInput = document.getElementById('phone');
+        phoneInput.addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '');
+            if (this.value.length > 10) {
+                this.value = this.value.slice(0, 10);
+            }
+        });
 
 
-	//Ciclos
+        // Ciclos (Recalculate on date change)
+        const fechaInput = document.getElementById('fecha');
+        const hoy = new Date();
+        if (!fechaInput.value) {
+            fechaInput.value = hoy.toISOString().split('T')[0];
+        }
+        calcularFechas();
+        fechaInput.addEventListener('change', calcularFechas);
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Establecer fecha actual en el input
-    const fechaInput = document.getElementById('fecha');
-    const hoy = new Date();
-    fechaInput.value = hoy.toISOString().split('T')[0];
 
-    // Calcular fechas por defecto
-    calcularFechas();
+        // Footer Year
+        document.getElementById("year").textContent = new Date().getFullYear();
 
-    // Recalcular cuando el usuario cambie la fecha
-    fechaInput.addEventListener('change', calcularFechas);
-});
 
-function calcularFechas() {
-    const fechaInput = document.getElementById('fecha').value;
-    if (!fechaInput) {
-        alert('Por favor selecciona una fecha');
-        return;
-    }
-
-    const fechaSeleccionada = new Date(fechaInput);
-
-    // Fechas base
-    const base82 = new Date(2025, 10, 25); // 25/11/2025
-    const base83 = new Date(2025, 10, 22); // 22/11/2025
-
-    // Intervalos
-    const intervalo82 = 3; // cada 3 días
-    const intervalo83 = 5; // cada 5 días
-
-    mostrarFechas('ciclo82', fechaSeleccionada, base82, intervalo82, 10);
-    mostrarFechas('ciclo83', fechaSeleccionada, base83, intervalo83, 10);
-}
-
-function mostrarFechas(elementId, fechaSeleccionada, fechaBase, intervalo, cantidad) {
-    const lista = document.getElementById(elementId);
-    lista.innerHTML = '';
-
-    let fecha = new Date(fechaBase);
-    let fechasGeneradas = 0;
-
-    // Avanzar hasta que la fecha sea posterior a la seleccionada
-    while (fecha <= fechaSeleccionada) {
-        fecha.setDate(fecha.getDate() + intervalo);
-    }
-
-    // Generar las próximas fechas
-    while (fechasGeneradas < cantidad) {
-        lista.innerHTML += `<li>${fecha.toLocaleDateString('es-MX')}</li>`;
-        fecha.setDate(fecha.getDate() + intervalo);
-        fechasGeneradas++;
-    }
-}
-
-// Inserta el año actual en el span con id="year"
-    document.getElementById("year").textContent = new Date().getFullYear();
-
+    }); 
 
 </script>
 </body>
 </html>
-
-
-
