@@ -1,208 +1,200 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Telcel - Toolkit</title>
-<link rel="icon" type="image/svg+xml" href='data:image/svg+xml;utf8,
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telcel - Toolkit | Home</title>
+    <link rel="icon" type="image/svg+xml" href='data:image/svg+xml;utf8,
   <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128">
     <rect x="12"  y="92" width="20" height="24" rx="6" ry="6" fill="%230047BB"/>
     <rect x="44"  y="76" width="20" height="40" rx="6" ry="6" fill="%230047BB"/>
     <rect x="76"  y="48" width="20" height="68" rx="6" ry="6" fill="%230047BB"/>
     <rect x="108" y="20" width="20" height="96" rx="6" ry="6" fill="%230047BB" />
   </svg>'>
-
-<style>
-body {
-  margin: 0;
-  padding-bottom: 80px; /* espacio para el footer */
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: #f4f4f4;
-}
-
-/* Header Telcel */
-header {
-  background-color: #0047BB;
-  color: #fff;
-  text-align: center;
-  padding: 20px;
-  font-size: 28px;
-  font-weight: bold;
-  letter-spacing: 1px;
-}
-
-h3 {
-  font-size: 20px;
-  color: #0047BB; /* Azul Telcel */
-  margin-bottom: 10px;
-  text-align: center;
-}
-input, button {
-  margin: 8px;
-  outline: none;
-  font-size: 18px;
-}
-input {
-  width: 380px;
-  height: 40px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding-left: 10px;
-}
-button {
-  width: 280px;
-  height: 42px;
-  background-color: #0047BB;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
-button:hover:not(:disabled) {
-  background-color: #003a99;
-}
-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-#mensaje, #mensajeID, #msgTel1, #msgTel2 {
-  font-size: 14px;
-  color: #28a745; /* verde para éxito */
-  margin-left: 10px;
-  visibility: hidden;
-}
-
-/* Contenedor de secciones en grid */
-.sections-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 columnas */
-  gap: 20px; /* espacio entre secciones */
-  max-width: 1600px;
-  margin: 20px auto;
-  padding: 0 20px;
-}
-
-.section {
-  padding: 15px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-.ciclos-container{
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 columnas */
-  gap: 20px; /* espacio entre secciones */
-  max-width: 1600px;
-  margin: 20px auto;
-  padding: 0 20px;
-}
-
-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 15px;
-  text-align: center;
-  font-size: 14px;
-  color: #fff;
-  background-color: #0047BB;
-  border-top: 2px solid #003a99;
-}
-
-</style>
+    <link rel="preload" href="css/style.css" as="style">
+    <link rel="stylesheet" href="css/style.css" media="print" onload="this.media='all'">
 </head>
+
 <body>
-<!-- Header -->
-<header>
-Telcel - Toolkit
-</header>
 
-<!-- Contenedor de todas las secciones -->
-<div class="sections-container">
-  <!-- Sección ICCID -->
-  <div class="section">
-    <h3>Generar ICCID</h3>
-    <input type="text" id="iccid18" placeholder="ICCID 18 DIGITOS" maxlength="18">
-    <button id="procesar" disabled>PROCESAR</button><br>
-    <input type="text" id="iccid19" placeholder="ICCID 19 DIGITOS" readonly>
-    <button id="copiar" disabled>COPIAR</button>
-    <span id="mensaje">¡Copiado al portapapeles!</span>
-  </div>
+    <aside id="sidebar">
+        <h3>Menu</h3>
+        <ul>
+            <li><a href="#" data-page="home">🏠 Home</a></li>
+            <li><a href="pages/sku.html" data-page="sku">📦 SKU</a></li>
+            <li><a href="pages/Contactos.html">📞 Contactos</a></li>
+            <li><a href="pages/Manuales.html">📚 Manuales</a></li>
+        </ul>
+    </aside>
 
-  <!-- Sección Identificación -->
-  <div class="section">
-    <h3>Generar Identificación</h3>
-    <input type="text" id="identificacion" placeholder="IDMEX + 10 dígitos" readonly>
-    <button id="generarID">GENERAR IDENTIFICACIÓN</button>
-    <button id="copiarID" disabled>COPIAR</button>
-    <span id="mensajeID">¡Identificación copiada!</span>
-  </div>
+    <div id="content-wrapper">
+        <header>
+            <div id="header-title">Telcel - Toolkit</div>
+        </header>
 
-  <!-- Sección Números de contacto -->
-  <div class="section">
-    <h3>Número de contactos</h3>
-    <input type="text" id="telefono1" placeholder="Teléfono 1" readonly>
-    <button id="copiarTel1" disabled>COPIAR</button>
-    <span id="msgTel1">¡Teléfono 1 copiado!</span><br>
+        <main id="app-content">
 
-    <input type="text" id="telefono2" placeholder="Teléfono 2" readonly>
-    <button id="copiarTel2" disabled>COPIAR</button>
-    <span id="msgTel2">¡Teléfono 2 copiado!</span><br>
+            <div id="page-home" class="page-content-wrapper">
+                <div class="sections-container">
+                    <div class="section">
+                        <h3>Generar ICCID</h3>
+                        <input type="text" id="iccid18" placeholder="ICCID 18 DIGITOS" maxlength="18">
+                        <button id="procesar" disabled>PROCESAR</button><br>
+                        <input type="text" id="iccid19" placeholder="ICCID 19 DIGITOS" readonly>
+                        <button id="copiar" disabled>COPIAR</button>
+                        <span id="mensaje">¡Copiado al portapapeles!</span>
+                    </div>
 
-    <button id="generarTels">GENERAR NÚMEROS</button>
-  </div>
+                    <div class="section">
+                        <h3>Generar Identificación</h3>
+                        <input type="text" id="identificacion" placeholder="IDMEX + 10 dígitos" readonly>
+                        <button id="generarID">GENERAR IDENTIFICACIÓN</button>
+                        <button id="copiarID" disabled>COPIAR</button>
+                        <span id="mensajeID">¡Identificación copiada!</span>
+                    </div>
 
-  <!-- Sección Región-->
-<div class="section">
-  <h3>Identificador de LADA México R9 - DEUR</h3>
-  <input type="text" id="phone" placeholder="Ingresa el número (10 dígitos)" maxlength="10" inputmode="numeric" pattern="\d{10}" title="Debe contener exactamente 10 dígitos">
-  <button onclick="buscarLada()">Buscar</button>
-  <p id="resultado"></p>
-</div>
+                    <div class="section">
+                        <h3>Número de contactos</h3>
+                        <input type="text" id="telefono1" placeholder="Teléfono 1" readonly>
+                        <button id="copiarTel1" disabled>COPIAR</button>
+                        <span id="msgTel1">¡Teléfono 1 copiado!</span><br>
 
-<!-- Sección ciclos-->
-<div class="section">
-  <h3>Próximas Fechas de Corte</h3>
-    <label for="fecha">Selecciona la fecha de activación:</label>
-    <input type="date" id="fecha" onkeydown="return false;" maxlength="8">
-    <!--button onclick="calcularFechas()">Calcular</button-->
-	<br>
-	<label>Proximas 10 fechas de corte:</label>
-	<div class="result">
-		<div class="ciclos-container">
-			<div class="ciclo">
-				<h4>Ciclo 82:</h4>
-				<ul id="ciclo82"></ul>
-			</div>
-			<div class="ciclo">
-				<h4>Ciclo 83:</h4>
-				<ul id="ciclo83"></ul>
-			</div>
-		</div>
+                        <input type="text" id="telefono2" placeholder="Teléfono 2" readonly>
+                        <button id="copiarTel2" disabled>COPIAR</button>
+                        <span id="msgTel2">¡Teléfono 2 copiado!</span><br>
+
+                        <button id="generarTels">GENERAR NÚMEROS</button>
+                    </div>
+
+                    <div class="section">
+                        <h3>Identificador de LADA México R9 - DEUR</h3>
+                        <input type="text" id="phone" placeholder="Ingresa el número (10 dígitos)" maxlength="10"
+                            inputmode="numeric" pattern="\d{10}" title="Debe contener exactamente 10 dígitos">
+                        <button onclick="buscarLada()">Buscar</button>
+                        <p id="resultado"></p>
+                    </div>
+
+                    <div class="section">
+                        <h3>Próximas Fechas de Corte</h3>
+                        <label for="fecha">Selecciona la fecha de activación:</label>
+                        <input type="date" id="fecha" onkeydown="return false;" maxlength="8">
+                        <br>
+                        <label>Proximas 10 fechas de corte:</label>
+                        <div class="result">
+                            <div class="ciclos-container">
+                                <div class="ciclo">
+                                    <h4>Ciclo 82:</h4>
+                                    <ul id="ciclo82"></ul>
+                                </div>
+                                <div class="ciclo">
+                                    <h4>Ciclo 83:</h4>
+                                    <ul id="ciclo83"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <footer>
+            Creado por CMOG | by EpamNeoris | © <span id="year"></span> Todos los derechos reservados | **V5.1.1**
+        </footer>
     </div>
-</div>
 
-    
-</div>
+    <script>
+        // Base de datos de ladas
+        const ladas = {
+            "55": "Ciudad de México y área metropolitana",
+            "56": "Ciudad de México y área metropolitana (Nueva)",
+            "33": "Guadalajara, Jalisco",
+            "81": "Monterrey, Nuevo León",
+            "477": "León, Guanajuato",
+            "664": "Tijuana, Baja California",
+            "656": "Ciudad Juárez, Chihuahua",
+            "998": "Cancún, Quintana Roo",
+            "222": "Puebla, Puebla",
+            "442": "Querétaro, Qro.",
+            "444": "San Luis Potosí, SLP",
+            "229": "Veracruz, Veracruz",
+            "871": "Torreón, Coahuila/Durango (La Laguna)",
+            "722": "Toluca, Estado de México",
+            "999": "Mérida, Yucatán",
+            "662": "Hermosillo, Sonora",
+            "667": "Culiacán, Sinaloa",
+            "449": "Aguascalientes, Ags.",
+            "981": "Campeche, Campeche",
+            "961": "Tuxtla Gutiérrez, Chiapas",
+            "614": "Chihuahua, Chihuahua",
+            "844": "Saltillo, Coahuila",
+            "312": "Colima, Colima",
+            "618": "Durango, Durango",
+            "473": "Guanajuato, Gto.",
+            "747": "Chilpancingo, Guerrero",
+            "771": "Pachuca, Hidalgo",
+            "443": "Morelia, Michoacán",
+            "777": "Cuernavaca, Morelos",
+            "311": "Tepic, Nayarit",
+            "951": "Oaxaca, Oaxaca",
+            "983": "Chetumal, Quintana Roo",
+            "993": "Villahermosa, Tabasco",
+            "834": "Ciudad Victoria, Tamaulipas",
+            "246": "Tlaxcala, Tlaxcala",
+            "228": "Xalapa, Veracruz",
+            "492": "Zacatecas, Zacatecas",
+            "612": "La Paz, Baja California Sur",
+            "686": "Mexicali, Baja California",
+            "663": "Ensenada, Baja California",
+            "461": "Celaya, Guanajuato",
+            "462": "Irapuato, Guanajuato",
+            "899": "Reynosa, Tamaulipas",
+            "672": "Navolato, Sinaloa",
+            "493": "Jerez, Zacatecas",
+            "494": "Fresnillo, Zacatecas",
+            "496": "Sombrerete, Zacatecas"
+        };
 
-<!-- Footer fijo -->
-<footer>
-Creado por CMOG | by EpamNeoris | © <span id="year"></span> Todos los derechos reservados | V2.1.1
-</footer>
+        /**
+         * Función para buscar el identificador de LADA.
+         */
+        function buscarLada() {
+            const phoneInput = document.getElementById('phone');
+            const resultadoDiv = document.getElementById('resultado');
+            const telefono = phoneInput.value;
 
-<!-- Script -->
-<script>
-        // ICCID
+            if (telefono.length !== 10) {
+                resultadoDiv.textContent = "Error: El número debe contener exactamente 10 dígitos.";
+                resultadoDiv.style.color = "red";
+                return;
+            }
+
+            const lada2 = telefono.substring(0, 2);
+            const lada3 = telefono.substring(0, 3);
+            let ciudad = "LADA no encontrada. Lada: " + lada3 + " / " + lada2;
+            let color = "red";
+
+            if (ladas[lada3]) {
+                ciudad = `LADA: ${lada3} - ${ladas[lada3]}`;
+                color = "green";
+            } else if (ladas[lada2]) {
+                ciudad = `LADA: ${lada2} - ${ladas[lada2]}`;
+                color = "green";
+            }
+
+            resultadoDiv.textContent = ciudad;
+            resultadoDiv.style.color = color;
+        }
+
+        // Funcionalidad ICCID
         const input = document.getElementById("iccid18");
         const output = document.getElementById("iccid19");
         const procesarBtn = document.getElementById("procesar");
         const copiarBtn = document.getElementById("copiar");
         const mensaje = document.getElementById("mensaje");
 
+        // Lógica para validar ICCID y procesar
         input.addEventListener("input", function () {
             this.value = this.value.replace(/\D/g, '');
             procesarBtn.disabled = this.value.length !== 18;
@@ -212,15 +204,12 @@ Creado por CMOG | by EpamNeoris | © <span id="year"></span> Todos los derechos 
             const num = input.value;
             const reversed = num.split('').reverse();
             let total = 0;
-
             for (let i = 0; i < reversed.length; i++) {
                 let digit = parseInt(reversed[i]);
                 total += i % 2 ? digit : 2 * digit - (digit > 4 ? 9 : 0);
             }
-
             const verificationDigit = (total * 9) % 10;
             output.value = num + verificationDigit;
-
             copiarBtn.disabled = false;
             mensaje.style.visibility = "hidden";
         };
@@ -233,28 +222,23 @@ Creado por CMOG | by EpamNeoris | © <span id="year"></span> Todos los derechos 
                 });
         };
 
-        // Identificación
+        // Funcionalidad Identificación (IDMEX)
         const identificacionInput = document.getElementById("identificacion");
         const generarIDBtn = document.getElementById("generarID");
         const copiarIDBtn = document.getElementById("copiarID");
         const mensajeID = document.getElementById("mensajeID");
 
-        function generarIdentificacion() {
-            const prefix = "IDMEX";
-            let randomDigits = "";
-
-            while (randomDigits.length < 10) {
-                let digit = Math.floor(Math.random() * 10);
-                if (randomDigits.length === 0 || Math.abs(digit - parseInt(randomDigits[randomDigits.length - 1])) !== 1) {
-                    randomDigits += digit;
-                }
+        // Generador de 10 dígitos aleatorios
+        function generarDigitosAleatorios() {
+            let result = '';
+            for (let i = 0; i < 10; i++) {
+                result += Math.floor(Math.random() * 10);
             }
-
-            return prefix + randomDigits;
+            return result;
         }
 
         generarIDBtn.onclick = function () {
-            identificacionInput.value = generarIdentificacion();
+            identificacionInput.value = "IDMEX" + generarDigitosAleatorios();
             copiarIDBtn.disabled = false;
             mensajeID.style.visibility = "hidden";
         };
@@ -317,191 +301,72 @@ Creado por CMOG | by EpamNeoris | © <span id="year"></span> Todos los derechos 
                 });
         };
 
-        // Base de datos de ladas
-        const ladas = {
-            "55": "Ciudad de México y área metropolitana",
-            "33": "Guadalajara, Jalisco",
-            "81": "Monterrey, Nuevo León",
-            "449": "Aguascalientes, Ags.",
-            "686": "Mexicali, Baja California",
-            "612": "La Paz, Baja California Sur",
-            "981": "Campeche, Campeche",
-            "961": "Tuxtla Gutiérrez, Chiapas",
-            "614": "Chihuahua, Chihuahua",
-            "844": "Saltillo, Coahuila",
-            "312": "Colima, Colima",
-            "618": "Durango, Durango",
-            "722": "Toluca, Estado de México",
-            "473": "Guanajuato, Gto.",
-            "747": "Chilpancingo, Guerrero",
-            "771": "Pachuca, Hidalgo",
-            "443": "Morelia, Michoacán",
-            "777": "Cuernavaca, Morelos",
-            "311": "Tepic, Nayarit",
-            "951": "Oaxaca, Oaxaca",
-            "222": "Puebla, Puebla",
-            "442": "Querétaro, Qro.",
-            "983": "Chetumal, Quintana Roo",
-            "444": "San Luis Potosí, SLP",
-            "667": "Culiacán, Sinaloa",
-            "662": "Hermosillo, Sonora",
-            "993": "Villahermosa, Tabasco",
-            "834": "Ciudad Victoria, Tamaulipas",
-            "246": "Tlaxcala, Tlaxcala",
-            "228": "Xalapa, Veracruz",
-            "999": "Mérida, Yucatán",
-            "492": "Zacatecas, Zacatecas",
-            "646": "Ensenada, Baja California",
-            "664": "Tijuana, Baja California",
-            "871": "Torreón, Coahuila/Durango",
-            "656": "Ciudad Juárez, Chihuahua",
-            "669": "Mazatlán, Sinaloa",
-            "998": "Cancún, Quintana Roo",
-            "961": "Tuxtla Gutiérrez, Chiapas",
-            "722": "Toluca, Estado de México",
-            "473": "Guanajuato, Gto.",
-            "477": "León, Gto.",
-            "462": "Irapuato, Gto.",
-            "464": "Salamanca, Gto.",
-            "466": "Salvatierra, Gto.",
-            "468": "San Felipe, Gto.",
-            "469": "Pénjamo, Gto.",
-            "442": "Querétaro, Qro.",
-            "446": "San Juan del Río, Qro.",
-            "771": "Pachuca, Hidalgo",
-            "779": "Tizayuca, Hidalgo",
-            "735": "Cuautla, Morelos",
-            "734": "Jojutla, Morelos",
-            "961": "Tuxtla Gutiérrez, Chiapas",
-            "962": "Tapachula, Chiapas",
-            "963": "Comitán, Chiapas",
-            "964": "San Cristóbal de las Casas, Chiapas",
-            "965": "Palenque, Chiapas",
-            "981": "Campeche, Campeche",
-            "982": "Ciudad del Carmen, Campeche",
-            "612": "La Paz, BCS",
-            "613": "Ciudad Constitución, BCS",
-            "624": "Cabo San Lucas, BCS",
-            "646": "Ensenada, BC",
-            "664": "Tijuana, BC",
-            "686": "Mexicali, BC",
-            "661": "Rosarito, BC",
-            "662": "Hermosillo, Sonora",
-            "644": "Ciudad Obregón, Sonora",
-            "631": "Nogales, Sonora",
-            "642": "Navojoa, Sonora",
-            "622": "Guaymas, Sonora",
-            "638": "Puerto Peñasco, Sonora",
-            "667": "Culiacán, Sinaloa",
-            "669": "Mazatlán, Sinaloa",
-            "687": "Guasave, Sinaloa",
-            "653": "Los Mochis, Sinaloa",
-            "834": "Ciudad Victoria, Tamaulipas",
-            "899": "Reynosa, Tamaulipas",
-            "868": "Matamoros, Tamaulipas",
-            "833": "Tampico, Tamaulipas",
-            "487": "Río Verde, San Luis Potosí",
-            "481": "Ciudad Valles, San Luis Potosí",
-            "444": "San Luis Potosí, SLP",
-            "492": "Zacatecas, Zacatecas",
-            "493": "Jerez, Zacatecas",
-            "494": "Fresnillo, Zacatecas",
-            "496": "Sombrerete, Zacatecas",
-			"663": "Tijuana, Baja California"
-        };
 
-        function buscarLada() {
-  const numero = document.getElementById('phone').value.trim();
-
-  if (numero.length < 2) {
-    document.getElementById('resultado').textContent = "Por favor ingresa al menos 2 dígitos.";
-    return;
-  }
-
-  // Detectar lada (2 o 3 dígitos)
-  let lada = numero.substring(0, 3);
-  if (!ladas[lada]) {
-    lada = numero.substring(0, 2);
-  }
-
-  const resultado = ladas[lada] ? 
-    `La lada ${lada} pertenece a ${ladas[lada]}.` : 
-    "Lada no encontrada en la base de datos.";
-
-  document.getElementById('resultado').textContent = resultado;
-}
-
-const phoneInput = document.getElementById('phone');
-  phoneInput.addEventListener('input', function() {
-    // Elimina cualquier carácter que no sea número
-    this.value = this.value.replace(/\D/g, '');
-    // Limita a 10 dígitos
-    if (this.value.length > 10) {
-      this.value = this.value.slice(0, 10);
-    }
-  });
+        // LADA Input Filter
+        const phoneInput = document.getElementById('phone');
+        phoneInput.addEventListener('input', function () {
+            this.value = this.value.replace(/\D/g, '');
+            if (this.value.length > 10) {
+                this.value = this.value.slice(0, 10);
+            }
+        });
 
 
-	//Ciclos
+        // Funcionalidad Ciclos de Corte
+        const fechaInput = document.getElementById('fecha');
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Establecer fecha actual en el input
-    const fechaInput = document.getElementById('fecha');
-    const hoy = new Date();
-    fechaInput.value = hoy.toISOString().split('T')[0];
+        function calcularFechas() {
+            const fechaSeleccionada = new Date(fechaInput.value + 'T00:00:00');
+            if (isNaN(fechaSeleccionada)) {
+                document.getElementById('ciclo82').innerHTML = '<li>Selecciona una fecha válida.</li>';
+                document.getElementById('ciclo83').innerHTML = '<li>Selecciona una fecha válida.</li>';
+                return;
+            }
 
-    // Calcular fechas por defecto
-    calcularFechas();
+            // Definir fechas base e intervalos para los dos ciclos (ejemplo de la fuente)
+            const base82 = new Date('2024-03-08T00:00:00'); // Fecha de inicio de ejemplo para Ciclo 82
+            const intervalo82 = 2; // Días de intervalo de ejemplo
+            const base83 = new Date('2024-03-05T00:00:00'); // Fecha de inicio de ejemplo para Ciclo 83
+            const intervalo83 = 5; // Días de intervalo de ejemplo
 
-    // Recalcular cuando el usuario cambie la fecha
-    fechaInput.addEventListener('change', calcularFechas);
-});
+            mostrarFechas('ciclo82', fechaSeleccionada, base82, intervalo82, 10);
+            mostrarFechas('ciclo83', fechaSeleccionada, base83, intervalo83, 10);
+        }
 
-function calcularFechas() {
-    const fechaInput = document.getElementById('fecha').value;
-    if (!fechaInput) {
-        alert('Por favor selecciona una fecha');
-        return;
-    }
+        function mostrarFechas(elementId, fechaSeleccionada, fechaBase, intervalo, cantidad) {
+            const lista = document.getElementById(elementId);
+            lista.innerHTML = '';
+            let fecha = new Date(fechaBase);
 
-    const fechaSeleccionada = new Date(fechaInput);
+            // Avanzar hasta encontrar la primera fecha de corte IGUAL o POSTERIOR
+            while (fecha.getTime() < fechaSeleccionada.getTime()) {
+                fecha.setDate(fecha.getDate() + intervalo);
+            }
 
-    // Fechas base
-    const base82 = new Date(2025, 10, 25); // 25/11/2025
-    const base83 = new Date(2025, 10, 22); // 22/11/2025
+            let fechasGeneradas = 0;
+            while (fechasGeneradas < cantidad) {
+                lista.innerHTML += `<li>${fecha.toLocaleDateString('es-MX')}</li>`;
+                fecha.setDate(fecha.getDate() + intervalo);
+                fechasGeneradas++;
+            }
+        }
 
-    // Intervalos
-    const intervalo82 = 3; // cada 3 días
-    const intervalo83 = 5; // cada 5 días
-
-    mostrarFechas('ciclo82', fechaSeleccionada, base82, intervalo82, 10);
-    mostrarFechas('ciclo83', fechaSeleccionada, base83, intervalo83, 10);
-}
-
-function mostrarFechas(elementId, fechaSeleccionada, fechaBase, intervalo, cantidad) {
-    const lista = document.getElementById(elementId);
-    lista.innerHTML = '';
-
-    let fecha = new Date(fechaBase);
-    let fechasGeneradas = 0;
-
-    // Avanzar hasta que la fecha sea posterior a la seleccionada
-    while (fecha <= fechaSeleccionada) {
-        fecha.setDate(fecha.getDate() + intervalo);
-    }
-
-    // Generar las próximas fechas
-    while (fechasGeneradas < cantidad) {
-        lista.innerHTML += `<li>${fecha.toLocaleDateString('es-MX')}</li>`;
-        fecha.setDate(fecha.getDate() + intervalo);
-        fechasGeneradas++;
-    }
-}
-
-// Inserta el año actual en el span con id="year"
-    document.getElementById("year").textContent = new Date().getFullYear();
+        // Inicializar y recalcular en el cambio de fecha
+        const hoy = new Date();
+        if (!fechaInput.value) {
+            fechaInput.value = hoy.toISOString().split('T')[0];
+        }
+        calcularFechas();
+        fechaInput.addEventListener('change', calcularFechas);
 
 
-</script>
+        // Footer Year
+        document.getElementById("year").textContent = new Date().getFullYear();
+
+        // Hacemos que la función buscarLada esté disponible globalmente (es llamada desde el botón)
+        window.buscarLada = buscarLada;
+
+    </script>
 </body>
+
 </html>

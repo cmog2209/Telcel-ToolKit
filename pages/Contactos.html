@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telcel - Toolkit | Contactos</title>
+    <link rel="icon" type="image/svg+xml" href='data:image/svg+xml;utf8,...'>
+    <link rel="preload" href="../css/style.css" as="style">
+    <link rel="stylesheet" href="../css/style.css" media="print" onload="this.media='all'">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+</head>
+
+<body>
+    <aside id="sidebar">
+        <h3>Menu</h3>
+        <ul>
+            <li><a href="../index.html" data-page="home">🏠 Home</a></li>
+            <li><a href="sku.html" data-page="sku">📦 SKU</a></li>
+            <li><a href="#">📞 Contactos</a></li>
+            <li><a href="Manuales.html">📚 Manuales</a></li>
+        </ul>
+    </aside>
+
+    <div id="content-wrapper">
+        <header>
+            <div id="header-title">Telcel - Toolkit</div>
+        </header>
+        <main>
+        <div id="login-area" style="display:none;">
+            <h2>Acceso Requerido</h2>
+            <p>Por favor, introduce tu correo y contraseña para ver la lista de contactos.</p>
+            <input type="email" id="login-email" placeholder="Correo Electrónico">
+            <input type="password" id="login-password" placeholder="Contraseña">
+            <button onclick="attemptLogin()">Iniciar Sesión</button>
+            <p id="auth-error" style="color:red; margin-top: 10px;"></p>
+        </div>
+
+        <div class="card" id="contact-card" style="display:none;">
+            <div class="header-controls">
+                <h1>Lista de Contactos</h1>
+                <p id="user-display">Bienvenido, Usuario.</p>
+            </div>
+            
+            <div class="controls">
+                <input type="text" id="contact-filter" onkeyup="filterContacts()" placeholder="Buscar por Nombre, Título, etc..." title="Escribe aquí para buscar">
+                
+                <div class="auth-buttons">
+                    <button onclick="logout()">Cerrar Sesión</button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table id="contact-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Título</th>
+                            <th>Departamento</th>
+                            <th>Email 1</th>
+                            <th>Email 2</th>
+                            <th>Tipo Teléfono</th>
+                            <th>Teléfono</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="7">Cargando contactos...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    </div>
+    
+
+    
+    
+    <footer>
+            Creado por CMOG | by EpamNeoris | © <span id="year"></span> Todos los derechos reservados | **V5.1.1**
+        </footer>
+
+    <script>
+    // ---------------------------------------------
+    // 1. CONFIGURACIÓN DE FIREBASE
+    // ---------------------------------------------
+    const firebaseConfig = {
+        apiKey: "AIzaSyB8B7qBD6PifGLHnyfoJ6kX1_SSsE0vOcY",
+        authDomain: "toolkitaccesos.firebaseapp.com",
+        projectId: "toolkitaccesos",
+        storageBucket: "toolkitaccesos.firebasestorage.app",
+        messagingSenderId: "569003973976",
+        appId: "1:569003973976:web:07e550b6e86f5b7575592d"
+    };
+
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database(); 
+    
+    // ---------------------------------------------
+    // 2. FUNCIONES DE AUTENTICACIÓN (CORREGIDAS)
+    // ---------------------------------------------
+
+    // Función que se llama al presionar el botón de Iniciar Sesión
+    function attemptLogin() {
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        const errorElement = document.getElementById('auth-error');
+        errorElement.textContent = ''; // Limpiar errores anteriores
+
+        if (!email || !password) {
+            errorElement.textContent = 'Por favor, introduce correo y contraseña.';
+            return;
+        }
+
+        // Intento de inicio de sesión con Correo/Contraseña
+        auth.signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                // Éxito: auth.onAuthStateChanged manejará la UI
+                console.log("Inicio de sesión exitoso:", userCredential.user.email);
+            })
+            .catch((error) => {
+                // Fallo: Mostrar el error
+                console.error("Error al iniciar sesión:", error);
+                // Mapear errores comunes de Firebase a mensajes amigables
+                let errorMessage;
+                switch (error.code) {
+                    case 'auth/user-not-found':
+                    case 'auth/wrong-password':
+                        errorMessage = 'Correo o contraseña incorrectos.';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = 'Formato de correo inválido.';
+                        break;
+                    default:
+                        errorMessage = 'Error desconocido. Inténtalo de nuevo.';
+                }
+                errorElement.textContent = errorMessage;
+            });
+    }
+
+    function logout() {
+        auth.signOut()
+            .then(() => {
+                // auth.onAuthStateChanged se encargará de ocultar la tabla
+                console.log("Sesión cerrada.");
+            })
+            .catch((error) => {
+                console.error("Error al cerrar sesión:", error);
+            });
+    }
+
+    // ---------------------------------------------
+    // 3. FUNCIÓN DE CARGA DE DATOS (Mantenida)
+    // ---------------------------------------------
+    
+    function createRow(contact) {
+        // ... (misma función createRow)
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${contact.nombre || 'N/A'}</td>
+            <td>${contact.titulo || 'N/A'}</td>
+            <td>${contact.departamento || 'N/A'}</td>
+            <td>${contact.email1 || 'N/A'}</td>
+            <td>${contact.email2 || 'N/A'}</td>
+            <td>${contact.tipotelefono || 'N/A'}</td>
+            <td>${contact.telefono || 'N/A'}</td>
+        `;
+        return row;
+    }
+
+    function loadContacts() {
+        const tableBody = document.querySelector('#contact-table tbody');
+        tableBody.innerHTML = '<tr><td colspan="7">Cargando contactos desde Realtime Database...</td></tr>';
+        
+        const contactsRef = db.ref('/'); 
+
+        contactsRef.once('value')
+            .then((snapshot) => {
+                tableBody.innerHTML = ''; 
+                const contacts = snapshot.val(); 
+
+                if (!contacts) {
+                    tableBody.innerHTML = '<tr><td colspan="7">No se encontraron contactos en la base de datos.</td></tr>';
+                    return;
+                }
+
+                const contactsArray = Array.isArray(contacts) ? contacts : Object.values(contacts);
+
+                if (contactsArray.length > 0) {
+                    contactsArray.forEach((contact) => {
+                        const newRow = createRow(contact);
+                        tableBody.appendChild(newRow);
+                    });
+                } else {
+                     tableBody.innerHTML = '<tr><td colspan="7">No se encontraron contactos.</td></tr>';
+                }
+            })
+            .catch((error) => {
+                console.error("Error cargando contactos:", error);
+                tableBody.innerHTML = `<tr><td colspan="7" class="error-message">Error al cargar los datos. Revisa la Consola (F12) o tus reglas de seguridad.</td></tr>`;
+            });
+    }
+
+    // ---------------------------------------------
+    // 4. FUNCIÓN DE FILTRADO (Mantenida)
+    // ---------------------------------------------
+    function filterContacts() {
+        // ... (misma función filterContacts)
+        const input = document.getElementById('contact-filter');
+        const filter = input.value.toUpperCase();
+        const table = document.querySelector('#contact-table'); 
+        const tr = table.getElementsByTagName('tr');
+
+        for (let i = 0; i < tr.length; i++) {
+            if (i === 0 && tr[i].parentNode.tagName === 'THEAD') continue; 
+            
+            let rowMatches = false;
+            const td = tr[i].getElementsByTagName('td');
+
+            for (let j = 0; j < td.length; j++) {
+                const cell = td[j];
+                if (cell) {
+                    const cellText = cell.textContent || cell.innerText;
+                    if (cellText.toUpperCase().indexOf(filter) > -1) {
+                        rowMatches = true;
+                        break;
+                    }
+                }
+            }
+
+            tr[i].style.display = rowMatches ? "" : "none";
+        }
+    }
+
+
+    // ---------------------------------------------
+    // 5. INICIO Y CONTROL DE LA INTERFAZ
+    // ---------------------------------------------
+    const loginArea = document.getElementById('login-area');
+    const contactCard = document.getElementById('contact-card');
+    const userDisplay = document.getElementById('user-display');
+    const tableBody = document.querySelector('#contact-table tbody');
+    
+    // Controla lo que se muestra en base al estado de autenticación
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            // USUARIO LOGUEADO
+            loginArea.style.display = 'none';
+            contactCard.style.display = 'block';
+            userDisplay.textContent = `Bienvenido, ${user.email}.`;
+            loadContacts();
+        } else {
+            // USUARIO DESLOGUEADO
+            loginArea.style.display = 'block';
+            contactCard.style.display = 'none';
+            tableBody.innerHTML = '<tr><td colspan="7">Inicia sesión para ver los contactos.</td></tr>';
+            document.getElementById('auth-error').textContent = ''; // Limpiar errores
+            document.getElementById('login-password').value = ''; // Limpiar contraseña
+        }
+    });
+
+
+    // Hacemos las funciones globales
+    window.attemptLogin = attemptLogin;
+    window.logout = logout;
+    window.filterContacts = filterContacts;
+</script>
+</body>
+
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telcel - Toolkit | SKU</title>
+    <link rel="icon" type="image/svg+xml" href='data:image/svg+xml;utf8,
+  <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128">
+    <rect x="12"  y="92" width="20" height="24" rx="6" ry="6" fill="%230047BB"/>
+    <rect x="44"  y="76" width="20" height="40" rx="6" ry="6" fill="%230047BB"/>
+    <rect x="76"  y="48" width="20" height="68" rx="6" ry="6" fill="%230047BB"/>
+    <rect x="108" y="20" width="20" height="96" rx="6" ry="6" fill="%230047BB" />
+  </svg>'>
+    <link rel="preload" href="../css/style.css" as="style">
+    <link rel="stylesheet" href="../css/style.css" media="print" onload="this.media='all'">
+    
+</head>
+<body>
+
+    <aside id="sidebar">
+        <h3>Menu</h3>
+        <ul>
+            <li><a href="../index.html">🏠 Home</a></li>
+            <li><a href="#" data-page="sku">📦 SKU</a></li>
+            <li><a href="Contactos.html">📞 Contactos</a></li>
+            <li><a href="Manuales.html">📚 Manuales</a></li>
+        </ul>
+    </aside>
+
+    <div id="content-wrapper">
+        <header>
+            <div id="header-title">Telcel - Toolkit | SKU</div>
+        </header>
+
+        <main id="app-content">
+
+            <div id="page-sku" class="page-content-wrapper">
+                <h2>Catálogo de SKUs</h2>
+                
+                <div class="filters-container">
+                    <div>
+                        <label for="search-input">Buscar en Catálogo:</label>
+                        <input type="text" id="search-input" onkeyup="filterTable()" placeholder="Escribe para buscar por SKU, Modelo, Canal/Región, etc...">
+                    </div>
+                </div>
+                <table class="sku-table" id="sku-data-table">
+                    <thead>
+                        <tr>
+                            <th>CANAL / REGIÓN</th>
+                            <th>SKU</th>
+                            <th>MODELO</th>
+                            <th>COSTO APROXIMADO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>CAC R9</td>
+                            <td>70015838</td>
+                            <td>Motorola LTE XT2053-2 E6S</td>
+                            <td>$1,299.00</td>
+                        </tr>
+                        <tr>
+                            <td>CAC R1</td>
+                            <td>71000000</td>
+                            <td>Motorola LTE XT2149 1 G50 5G A</td>
+                            <td>$4,499.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+            </div>
+
+        </main>
+
+        <footer>
+            Creado por CMOG | by EpamNeoris | © <span id="year"></span> Todos los derechos reservados | **V5.1.1**
+        </footer>
+    </div>
+
+    <script>
+        // Función para aplicar el filtro de búsqueda
+        function filterTable() {
+            // Obtener el texto de búsqueda y convertirlo a minúsculas
+            const searchInput = document.getElementById('search-input');
+            const filter = searchInput.value.toUpperCase(); 
+            const table = document.getElementById('sku-data-table');
+            const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+            // Iterar sobre todas las filas de la tabla
+            for (let i = 0; i < rows.length; i++) {
+                let showRow = false;
+                const cells = rows[i].getElementsByTagName('td');
+                
+                // Iterar sobre todas las celdas de la fila (CANAL/REGIÓN, SKU, MODELO, COSTO)
+                for (let j = 0; j < cells.length; j++) {
+                    const cellValue = cells[j].textContent || cells[j].innerText;
+                    
+                    // Si el valor de la celda incluye el texto de búsqueda, mostrar la fila
+                    if (cellValue.toUpperCase().indexOf(filter) > -1) {
+                        showRow = true;
+                        break; // Deja de revisar celdas en esta fila y pasa a la siguiente fila
+                    }
+                }
+                
+                // Mostrar u ocultar la fila
+                rows[i].style.display = showRow ? '' : 'none';
+            }
+        }
+        
+        // Footer Year
+        document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>
