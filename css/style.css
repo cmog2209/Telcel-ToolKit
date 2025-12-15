@@ -345,9 +345,6 @@ footer {
             cursor: pointer; /* Para indicar que se puede ordenar o filtrar */
         }
 
-.card {
-    margin: 0 200px;
-}
 /*loggin contactos*/
 /* Estilos para la tabla */
         table { width: 100%; border-collapse: collapse; }
@@ -371,4 +368,5 @@ footer {
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+
 
