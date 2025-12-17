@@ -31,9 +31,13 @@ body {
 }
 
 #sidebar h3 {
-    color: var(--telcel-blue);
+    color: white;
     text-align: center;
     margin-bottom: 20px;
+    background-color: var(--telcel-blue);
+    height: 52px;
+    margin-top: -20px ;
+    padding-top: 20px;
 }
 
 #sidebar ul {
@@ -224,6 +228,43 @@ footer {
   z-index: 1000;
 }
 
+/* Estilos de botones a plataformas */
+.grid-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* Crea 2 columnas iguales */
+        gap: 12px;                             /* Espacio entre botones */
+        justify-items: center;                 /* Centra los botones en su celda */
+        margin-top: 15px;
+    }
+
+    /* Estilo individual del botón */
+    .btn-acceso {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;             /* Se adapta al ancho de la columna del grid */
+        max-width: 160px;        /* Pero no crece más de esto para no verse largo */
+        height: 40px;
+        background-color: #0047BB;
+        color: white !important;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: bold;
+        text-align: center;
+        transition: 0.3s;
+    }
+
+    .btn-acceso:hover {
+        background-color: #00338d;
+        transform: translateY(-2px);
+    }
+
+    /* El quinto botón (MIGRAPLUS) se centra solo en la fila de abajo */
+    .btn-acceso:last-child:nth-child(odd) {
+        grid-column: span 2;
+    }
+
 /* --- Manuales --- */
 /* 1. Contenedor de navegación */
 .manuales-nav {
@@ -344,7 +385,6 @@ footer {
             background-color: var(--telcel-blue);
             cursor: pointer; /* Para indicar que se puede ordenar o filtrar */
         }
-
 /*loggin contactos*/
 /* Estilos para la tabla */
         table { width: 100%; border-collapse: collapse; }
