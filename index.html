@@ -49,22 +49,22 @@
                     <div class="section">
                         <h3>Generar Identificación</h3>
                         <input type="text" id="identificacion" placeholder="IDMEX + 10 dígitos" readonly>
-                        <button id="generarID">GENERAR IDENTIFICACIÓN</button>
-                        <button id="copiarID" disabled>COPIAR</button>
+                        <button id="generarID">GENERAR NUEVO</button>
+                        <button id="copiarID">COPIAR</button>
                         <span id="mensajeID">¡Identificación copiada!</span>
                     </div>
 
                     <div class="section">
                         <h3>Número de contactos</h3>
                         <input type="text" id="telefono1" placeholder="Teléfono 1" readonly>
-                        <button id="copiarTel1" disabled>COPIAR</button>
+                        <button id="copiarTel1">COPIAR</button>
                         <span id="msgTel1">¡Teléfono 1 copiado!</span><br>
 
                         <input type="text" id="telefono2" placeholder="Teléfono 2" readonly>
-                        <button id="copiarTel2" disabled>COPIAR</button>
+                        <button id="copiarTel2">COPIAR</button>
                         <span id="msgTel2">¡Teléfono 2 copiado!</span><br>
 
-                        <button id="generarTels">GENERAR NÚMEROS</button>
+                        <button id="generarTels">GENERAR NUEVOS</button>
                     </div>
 
                     <div class="section">
@@ -99,8 +99,6 @@
                         <div class="grid-container">
                             <a href="https://sso.telcel.com/oam/server/obrareq.cgi?encquery%3Df6%2B47pu3Sn7%2FjHOPVxGt%2BzZ%2FdTF2ZEJqBMz50TL8OxGSCJaXiay3684Lo7wDKRofx3a5GpCoaZ4GFkCdovWLBBB%2BnPfvqiR3K%2FtgkMqjk%2BJevBFTd2RmDlwmGKAwIstbLW77L5tKBg2ak9tj57WslOXyN3RGUaD6EKLbM8gnEWcJKc34z8wB3x7FZV0r0Lvtw2QrMnkpAsWe6jpNA50KNdiPhLqh9fEFMl7j4amGHFG7SEseOEa5VefB2nomhBcHvapvPH6DmX9TcWYnhIWeY7LZ9Y5BaaZz9%2FutUaU9k1EP4W5js7nnWOJFr38CEF8iuHoShPjaR6Y2mC4iVlFbeBVS6QCogGPNlUHkBCHqt2yxaC9YhvO2VKYYM3tJ4F%2BXb4IFnt0M1QDppMPZ6I5chk228kFQWsf%2BWcbZVZf0XK09F1gREsfwWGosImEgayYK1qZHKbH9mwZA3gPg0IQDflJzwGO5uLQWAnDWv%2FelGos%3D%20agentid%3DIHS_uxwasix1505%20ver%3D1%20crmethod%3D2" target="_blank" class="btn-acceso">MIGRAPLUS</a>
                             <a href="https://10.59.10.198:12900/operator/bes/sm/login/login.html?redirectUrl=%2Fbes%2Fsm%2Fportal%2Fhome.html%3Ftimestamp%3D1755542123213&logoutReason=SessionInvalid" target="_blank" class="btn-acceso">Validador de Insumos</a>
-                            <!--a href="http://d16sisactweb-sisacttransforma.apps.preprod.telcelcloud.dt/SisactWeb/faces/login.xhtml" target="_blank" class="btn-acceso">SISACT Op 1</a>
-                            <a href="http://10.119.79.60:9000/SisactWeb3/faces/login.xhtml" target="_blank" class="btn-acceso">SISACT Op 2</a-->
                             <a href="https://10.59.10.213/oc/bes/sm/login/login.html?redirectUrl=%2Fbes%2Fsm%2Fportal%2Fhome.html%3Ftimestamp%3D1620060928375&logoutReason=NoLogin" target="_blank" class="btn-acceso">CRM BES</a>
                         </div>
                     </div>
@@ -115,7 +113,7 @@
     </div>
 
     <script>
-        // Base de datos de ladas
+        // --- BASE DE DATOS DE LADAS ---
         const ladas = {
             "55": "Ciudad de México y área metropolitana",
             "56": "Ciudad de México y área metropolitana (Nueva)",
@@ -166,9 +164,8 @@
             "496": "Sombrerete, Zacatecas"
         };
 
-        /**
-         * Función para buscar el identificador de LADA.
-         */
+        // --- FUNCIONES GENERALES ---
+
         function buscarLada() {
             const phoneInput = document.getElementById('phone');
             const resultadoDiv = document.getElementById('resultado');
@@ -197,21 +194,20 @@
             resultadoDiv.style.color = color;
         }
 
-        // Funcionalidad ICCID
-        const input = document.getElementById("iccid18");
-        const output = document.getElementById("iccid19");
+        // --- ICCID ---
+        const inputICCID = document.getElementById("iccid18");
+        const outputICCID = document.getElementById("iccid19");
         const procesarBtn = document.getElementById("procesar");
         const copiarBtn = document.getElementById("copiar");
         const mensaje = document.getElementById("mensaje");
 
-        // Lógica para validar ICCID y procesar
-        input.addEventListener("input", function () {
+        inputICCID.addEventListener("input", function () {
             this.value = this.value.replace(/\D/g, '');
             procesarBtn.disabled = this.value.length !== 18;
         });
 
         procesarBtn.onclick = function () {
-            const num = input.value;
+            const num = inputICCID.value;
             const reversed = num.split('').reverse();
             let total = 0;
             for (let i = 0; i < reversed.length; i++) {
@@ -219,39 +215,36 @@
                 total += i % 2 ? digit : 2 * digit - (digit > 4 ? 9 : 0);
             }
             const verificationDigit = (total * 9) % 10;
-            output.value = num + verificationDigit;
+            outputICCID.value = num + verificationDigit;
             copiarBtn.disabled = false;
             mensaje.style.visibility = "hidden";
         };
 
         copiarBtn.onclick = function () {
-            navigator.clipboard.writeText(output.value)
+            navigator.clipboard.writeText(outputICCID.value)
                 .then(() => {
                     mensaje.style.visibility = "visible";
                     setTimeout(() => mensaje.style.visibility = "hidden", 2000);
                 });
         };
 
-        // Funcionalidad Identificación (IDMEX)
+        // --- IDENTIFICACIÓN (IDMEX) ---
         const identificacionInput = document.getElementById("identificacion");
         const generarIDBtn = document.getElementById("generarID");
         const copiarIDBtn = document.getElementById("copiarID");
         const mensajeID = document.getElementById("mensajeID");
 
-        // Generador de 10 dígitos aleatorios
-        function generarDigitosAleatorios() {
-            let result = '';
+        function generarIDMEX() {
+            let result = 'IDMEX';
             for (let i = 0; i < 10; i++) {
                 result += Math.floor(Math.random() * 10);
             }
-            return result;
-        }
-
-        generarIDBtn.onclick = function () {
-            identificacionInput.value = "IDMEX" + generarDigitosAleatorios();
+            identificacionInput.value = result;
             copiarIDBtn.disabled = false;
             mensajeID.style.visibility = "hidden";
-        };
+        }
+
+        generarIDBtn.onclick = generarIDMEX;
 
         copiarIDBtn.onclick = function () {
             navigator.clipboard.writeText(identificacionInput.value)
@@ -261,7 +254,7 @@
                 });
         };
 
-        // Números de contacto
+        // --- NÚMEROS DE CONTACTO ---
         const tel1Input = document.getElementById("telefono1");
         const tel2Input = document.getElementById("telefono2");
         const generarTelsBtn = document.getElementById("generarTels");
@@ -270,7 +263,7 @@
         const msgTel1 = document.getElementById("msgTel1");
         const msgTel2 = document.getElementById("msgTel2");
 
-        function generarTelefono() {
+        function crearNumAleatorio() {
             let telefono = "55";
             while (telefono.length < 10) {
                 telefono += Math.floor(Math.random() * 10);
@@ -278,13 +271,10 @@
             return telefono;
         }
 
-        generarTelsBtn.onclick = function () {
-            let tel1 = generarTelefono();
-            let tel2 = generarTelefono();
-
-            while (tel2 === tel1) {
-                tel2 = generarTelefono();
-            }
+        function generarContactos() {
+            let tel1 = crearNumAleatorio();
+            let tel2 = crearNumAleatorio();
+            while (tel2 === tel1) { tel2 = crearNumAleatorio(); }
 
             tel1Input.value = tel1;
             tel2Input.value = tel2;
@@ -293,51 +283,36 @@
             copiarTel2Btn.disabled = false;
             msgTel1.style.visibility = "hidden";
             msgTel2.style.visibility = "hidden";
-        };
+        }
+
+        generarTelsBtn.onclick = generarContactos;
 
         copiarTel1Btn.onclick = function () {
-            navigator.clipboard.writeText(tel1Input.value)
-                .then(() => {
-                    msgTel1.style.visibility = "visible";
-                    setTimeout(() => msgTel1.style.visibility = "hidden", 2000);
-                });
+            navigator.clipboard.writeText(tel1Input.value).then(() => {
+                msgTel1.style.visibility = "visible";
+                setTimeout(() => msgTel1.style.visibility = "hidden", 2000);
+            });
         };
 
         copiarTel2Btn.onclick = function () {
-            navigator.clipboard.writeText(tel2Input.value)
-                .then(() => {
-                    msgTel2.style.visibility = "visible";
-                    setTimeout(() => msgTel2.style.visibility = "hidden", 2000);
-                });
+            navigator.clipboard.writeText(tel2Input.value).then(() => {
+                msgTel2.style.visibility = "visible";
+                setTimeout(() => msgTel2.style.visibility = "hidden", 2000);
+            });
         };
 
-
-        // LADA Input Filter
-        const phoneInput = document.getElementById('phone');
-        phoneInput.addEventListener('input', function () {
-            this.value = this.value.replace(/\D/g, '');
-            if (this.value.length > 10) {
-                this.value = this.value.slice(0, 10);
-            }
-        });
-
-
-        // Funcionalidad Ciclos de Corte
+        // --- CICLOS DE CORTE ---
         const fechaInput = document.getElementById('fecha');
 
         function calcularFechas() {
-            const fechaSeleccionada = new Date(fechaInput.value + 'T00:00:00');
-            if (isNaN(fechaSeleccionada)) {
-                document.getElementById('ciclo82').innerHTML = '<li>Selecciona una fecha válida.</li>';
-                document.getElementById('ciclo83').innerHTML = '<li>Selecciona una fecha válida.</li>';
-                return;
-            }
-
-            // Definir fechas base e intervalos para los dos ciclos (ejemplo de la fuente)
-            const base82 = new Date('2024-03-08T00:00:00'); // Fecha de inicio de ejemplo para Ciclo 82
-            const intervalo82 = 3; // Días de intervalo de ejemplo
-            const base83 = new Date('2024-03-05T00:00:00'); // Fecha de inicio de ejemplo para Ciclo 83
-            const intervalo83 = 5; // Días de intervalo de ejemplo
+            const val = fechaInput.value;
+            if (!val) return;
+            const fechaSeleccionada = new Date(val + 'T00:00:00');
+            
+            const base82 = new Date('2024-03-08T00:00:00');
+            const intervalo82 = 3;
+            const base83 = new Date('2024-03-05T00:00:00');
+            const intervalo83 = 5;
 
             mostrarFechas('ciclo82', fechaSeleccionada, base82, intervalo82, 10);
             mostrarFechas('ciclo83', fechaSeleccionada, base83, intervalo83, 10);
@@ -347,34 +322,38 @@
             const lista = document.getElementById(elementId);
             lista.innerHTML = '';
             let fecha = new Date(fechaBase);
-
-            // Avanzar hasta encontrar la primera fecha de corte IGUAL o POSTERIOR
             while (fecha.getTime() < fechaSeleccionada.getTime()) {
                 fecha.setDate(fecha.getDate() + intervalo);
             }
-
-            let fechasGeneradas = 0;
-            while (fechasGeneradas < cantidad) {
+            for (let i = 0; i < cantidad; i++) {
                 lista.innerHTML += `<li>${fecha.toLocaleDateString('es-MX')}</li>`;
                 fecha.setDate(fecha.getDate() + intervalo);
-                fechasGeneradas++;
             }
         }
 
-        // Inicializar y recalcular en el cambio de fecha
-        const hoy = new Date();
-        if (!fechaInput.value) {
-            fechaInput.value = hoy.toISOString().split('T')[0];
-        }
-        calcularFechas();
         fechaInput.addEventListener('change', calcularFechas);
 
+        // --- INICIALIZACIÓN AL CARGAR LA PÁGINA ---
+        window.onload = function() {
+            // 1. Generar IDMEX automáticamente
+            generarIDMEX();
+            
+            // 2. Generar Números automáticamente
+            generarContactos();
 
-        // Footer Year
-        document.getElementById("year").textContent = new Date().getFullYear();
+            // 3. Setear año en footer
+            document.getElementById("year").textContent = new Date().getFullYear();
 
-        // Hacemos que la función buscarLada esté disponible globalmente (es llamada desde el botón)
-        window.buscarLada = buscarLada;
+            // 4. Inicializar fechas de corte con el día de hoy
+            const hoy = new Date();
+            fechaInput.value = hoy.toISOString().split('T')[0];
+            calcularFechas();
+        };
+
+        // Filtro para el input de LADA
+        document.getElementById('phone').addEventListener('input', function () {
+            this.value = this.value.replace(/\D/g, '').slice(0, 10);
+        });
 
     </script>
 </body>
